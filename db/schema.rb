@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_08_132239) do
+ActiveRecord::Schema.define(version: 2020_09_08_143538) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 2020_09_08_132239) do
     t.string "author"
     t.string "category"
     t.integer "pages"
-    t.integer "progress"
+    t.integer "progress", default: 1
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
