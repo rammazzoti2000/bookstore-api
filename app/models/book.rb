@@ -4,5 +4,8 @@ class Book < ApplicationRecord
   validates :pages, presence: true
   validates :category, presence: true
   validates :progress, presence: true
+
   default_scope { order(created_at: :asc) }
+
+  belongs_to :user
 end

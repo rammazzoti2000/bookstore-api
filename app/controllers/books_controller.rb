@@ -1,21 +1,30 @@
 class BooksController < ApplicationController
   before_action :set_book, only: [:show, :update, :destroy]
+  before_action :logged_in?
 
   # GET /books
   def index
     @books = Book.all
-
-    render json: @books
+    if @books
+      render json: @books
+    else
+      render json: @books.errors, status: :unprocessable_entity
+    end
   end
 
   # GET /books/1
   def show
-    render json: @book
+    @book = Book.find(params[:id])
+    if @book
+      render json: @book
+    else
+      render json: @book.errors, status: :unprocessable_entity
+    end
   end
 
   # POST /books
   def create
-    @book = Book.new(book_params)
+    @book = current_user.books.build(book_params)
 
     if @book.save
       render json: @book, status: :created, location: @book
@@ -36,6 +45,15 @@ class BooksController < ApplicationController
   # DELETE /books/1
   def destroy
     @book.destroy
+  end
+
+  def user_books
+    @user_books = Book.where(user_id: params[:id])
+    if @user_books
+      render json: @user_books
+    else
+      render json: @user_books.errors, status: :unprocessable_entity
+    end
   end
 
   private
