@@ -36,7 +36,7 @@ module BookstoreApi
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'https://bookstore-api-capstone.herokuapp.com/'
+        origins '*'
         resource(
           '*',
           headers: :any,

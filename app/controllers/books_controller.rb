@@ -1,35 +1,49 @@
 class BooksController < ApplicationController
   before_action :set_book, only: [:show, :update, :destroy]
+  skip_before_action :verify_authenticity_token
   before_action :logged_in?
 
   # GET /books
   def index
     @books = Book.all
     if @books
-      render json: @books
+      render json: {
+        code: 200,
+        data: Book.all.as_json
+      }
     else
-      render json: @books.errors, status: :unprocessable_entity
+      render json: {
+        code: 400,
+        errors: @books.errors.messages
+      }
     end
   end
 
   # GET /books/1
   def show
     @book = Book.find(params[:id])
-    if @book
-      render json: @book
+    if @reading
+      render json: {
+        code: 200,
+        data: @book.as_json
+      }
     else
-      render json: @book.errors, status: :unprocessable_entity
+      render json: @book.errors
     end
   end
 
   # POST /books
   def create
     @book = current_user.books.build(book_params)
-
     if @book.save
-      render json: @book, status: :created, location: @book
+      render json: {
+        code: 200
+      }
     else
-      render json: @book.errors, status: :unprocessable_entity
+      render json: {
+        code: 400,
+        errors: @user.errors.messages
+      }
     end
   end
 

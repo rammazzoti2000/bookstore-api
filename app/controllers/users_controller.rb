@@ -1,46 +1,30 @@
 class UsersController < ApplicationController
 
-  def index
-    @users = User.all
-    if @users
-      render json: {
-        users: @users
-      }
-    else
-      render json: {
-        status: 500,
-        errors: ['no users found']
-      }
-    end
-  end
-
-  def show
-    @user = User.find(params[:id])
-    if @user
-      render json: {
-        user: @user
-      }
-    else
-      render json: {
-        status: 500,
-        errors: ['user not found']
-      }
-    end
-  end
+  skip_before_action :verify_authenticity_token
 
   def create
     @user = User.new(user_params)
     if @user.save
-      login!
       render json: {
-        status: :created,
-        user: @user
+        code: 200
       }
     else
       render json: {
-        status: 500,
-        errors: @user.errors.full_messages
+        code: 400,
+        errors: @user.errors.messages
       }
+    end
+  end
+
+  def index
+    @users = User.all
+    if @users
+      render json: {
+        code: 200,
+        data: User.all.as_json
+      }
+    else
+      render json: @users.errors.messages
     end
   end
 
@@ -57,9 +41,18 @@ class UsersController < ApplicationController
     end
   end
 
-private
+  def destroy; end
+
+  private
 
   def user_params
-    params.require(:user).permit(:username, :email, :password, :password_confirmation)
+    params.require(:user).permit(
+      :user_name,
+      :email,
+      :password,
+      :password_confirmation,
+      :units,
+      :target
+    )
   end
 end
