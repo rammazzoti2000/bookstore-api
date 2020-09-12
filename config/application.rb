@@ -36,8 +36,12 @@ module BookstoreApi
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins /\Ahttp:\/\/localhost:\d+\z/
-        resource '*', headers: :any, methods: :any
+        origins '*'
+        resource(
+          '*',
+          headers: :any,
+          methods: [:get, :put, :delete, :post, :options]
+        )
       end
     end
   end
